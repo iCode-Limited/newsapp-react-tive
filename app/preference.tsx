@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuthContext } from '@/app/AuthContext';
+import HeaderBack from '@/components/header/HeaderBack';
+import { navigate } from 'expo-router/build/global-state/routing';
+import { useNavigation } from '@react-navigation/native';
 
 const Preference = () => {
   const [preferences, setPreferences] = useState({
@@ -20,6 +23,7 @@ const Preference = () => {
   });
 
   const { themeMode } = useAuthContext(); 
+  const navigation = useNavigation();
 
   useEffect(() => {
     const loadPreferences = async () => {
@@ -72,7 +76,8 @@ const Preference = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
-      <Text style={[styles.headerText, { color: currentTheme.text }]}>My Preferences</Text>
+      <HeaderBack title={'Preferences'} navigation={navigation}/>
+      {/* <Text style={[styles.headerText, { color: currentTheme.text }]}>My Preferences</Text> */}
       {Object.keys(preferences).map((key) => (
         <View style={[styles.settingItem, { borderBottomColor: currentTheme.borderColor }]} key={key}>
           <Text style={[styles.settingItemText, { color: currentTheme.text }]}>{key}</Text>
@@ -93,6 +98,8 @@ export default Preference;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 30,
   },
   headerText: {
     fontSize: 30,
@@ -104,9 +111,10 @@ const styles = StyleSheet.create({
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
+    borderTopWidth: 1,
     paddingHorizontal: 20,
     paddingVertical: 15,
+    borderTopColor:'#ddd'
   },
   settingItemText: {
     fontSize: 18,

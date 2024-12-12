@@ -61,7 +61,7 @@ const Signup = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      Alert.alert("Success", `Welcome back, ${user.email}`);
+      // Alert.alert("Success", `Welcome back, ${user.email}`);
       router.push("/(tabs)");
     } catch (error) {
       console.error("Sign-In Error: ", error);
@@ -88,15 +88,15 @@ const Signup = () => {
     <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={80}
+        // behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={0}
       >
         <ScrollView
           contentContainerStyle={[
             styles.scrollContainer,
             { backgroundColor: currentTheme.background },
           ]}
-          keyboardShouldPersistTaps="handled"
+          // keyboardShouldPersistTaps="handled"
         >
           {isForgotPassword && (
             <TouchableOpacity

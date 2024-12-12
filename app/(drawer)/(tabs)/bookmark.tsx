@@ -12,6 +12,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import { useAuthContext } from "@/app/AuthContext";
+import HeaderBack from "@/components/header/HeaderBack";
 const MyFavorites = () => {
   const navigation = useNavigation();
   const [favoritedItems, setFavoritedItems] = useState([]);
@@ -72,7 +73,8 @@ const MyFavorites = () => {
 
   return (
     <View style={[styles.container,themeMode === "dark" && { backgroundColor: "#1C1C22" }]}>
-       <Text style={[styles.headerText,themeMode === "dark" && { color: "#fff" }]}>My Bookmarks</Text>
+       {/* <Text style={[styles.headerText,themeMode === "dark" && { color: "#fff" }]}>My Bookmarks</Text> */}
+       <HeaderBack title={'Bookmark'} navigation={navigation}/>
       {favoritedItems.length === 0 ? (
         <View style={styles.noFavoritesContainer}>
           <Icon name="bookmark-border" size={50} color="#FF6347" />
@@ -117,10 +119,10 @@ const styles = StyleSheet.create({
     // marginBottom: 15,
     alignItems: 'center',
     justifyContent:'center',
-    borderBottomWidth: 1,
+    borderTopWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderBottomColor:'#ccc'
+    borderTopColor:'#ccc'
   },
   itemImage: {
     width: 65,

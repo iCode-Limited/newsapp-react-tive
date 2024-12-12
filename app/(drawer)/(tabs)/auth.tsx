@@ -104,7 +104,7 @@ const Signup = () => {
     <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        // behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={80}
       >
         <ScrollView
@@ -112,7 +112,7 @@ const Signup = () => {
             styles.scrollContainer,
             { backgroundColor: currentTheme.background },
           ]}
-          keyboardShouldPersistTaps="handled"
+          // keyboardShouldPersistTaps="handled"
         >
           {isForgotPassword && (
             <TouchableOpacity

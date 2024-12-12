@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: "95%",
-    height: 650,
+    height: height * 0.8,
     padding: 10,
     backgroundColor: "#fff",
     // borderRadius: 10,
@@ -162,9 +162,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: 'column',
     justifyContent: 'space-between',  
-    borderColor: "#ccc",
-    borderBottomColor:'#ccc',
-    borderBottomWidth:1
+    // borderColor: "#ccc",
+    // borderBottomColor:'#ccc',
+    // borderBottomWidth:1,
   },
   itemImage: {
     width: "100%",
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     paddingVertical: 10,  
-    marginBottom: 20,
+    marginBottom: 10,
   },
   iconButton: {
     marginHorizontal: 20,

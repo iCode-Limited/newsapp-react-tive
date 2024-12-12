@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useRouter } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
 import { useAuthContext } from './AuthContext';
+import HeaderBack from '@/components/header/HeaderBack';
 
 const Settings = () => {
   const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false);
@@ -44,17 +45,7 @@ const Settings = () => {
 
   return (
     <View style={[styles.container,themeMode === "dark" && { backgroundColor: "#1C1C22" }]}>
-     <Pressable
-        hitSlop={30}
-        style={styles.goBackIcon}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Icon name="arrow-back" size={28} color="#333" style={[themeMode === "dark" && { color: "#fff" }]} />
-      </Pressable>
-      <Text style={[styles.headerText,themeMode === "dark" && { color: "#fff" }]}>Settings</Text>
-
+     <HeaderBack title={'Setting'} navigation={navigation}/>
       <View style={styles.settingItem}>
         <Icon name="notifications" size={24} color="#4D55F5" />
         <View style={styles.switchStyle}>
@@ -147,8 +138,8 @@ export default Settings;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 30,
   },
   headerText: {
     fontSize: 30,
@@ -161,10 +152,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    marginBottom: 10,
-    top:20
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#ddd',
+    // marginBottom: 10,
+    borderTopWidth:1,
+    borderTopColor:'#ddd'
+    // top:20
   },
   settingItemText: {
     textAlign:'center',
