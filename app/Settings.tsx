@@ -138,26 +138,16 @@ export default Settings;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 30,
-  },
-  headerText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 30,
-    marginLeft: 20,
-    top:40
+    // paddingHorizontal: 10,
+    // paddingVertical: 30,
   },
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#ddd',
-    // marginBottom: 10,
-    borderTopWidth:1,
-    borderTopColor:'#ddd'
-    // top:20
+    paddingHorizontal: 15,
+    paddingVertical:15,
+    borderBottomWidth:1,
+    borderBottomColor:'#ddd'
   },
   settingItemText: {
     textAlign:'center',
@@ -206,15 +196,7 @@ const styles = StyleSheet.create({
   switchStyle:{
     flexDirection: 'row',
     alignItems: 'center',
-    // padding: 15,
     justifyContent:'space-between',
-    // marginBottom: 10,
-    width:'100%',
+    width:'90%',    
 },
-goBackIcon: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
-  },
 });

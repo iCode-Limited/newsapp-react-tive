@@ -54,7 +54,7 @@ export default function App() {
             <Tabs.Screen
                 name="auth"
                 options={{
-                    title: 'Sign In',
+                    title: 'User',
                     tabBarIcon: ({ color, focused }) => (
                         <Ionicons
                             name={focused ? "person" : "person-outline"}

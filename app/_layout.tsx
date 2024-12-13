@@ -1,36 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import AuthContextProvider from './AuthContext'; 
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AuthContextProvider from './AuthContext';
 
 export default function App() {
   return (
-    <AuthContextProvider>
-      <ThemeProvider
-        value={{
-          ...DefaultTheme,
-          colors: {
-            ...DefaultTheme.colors,
-            background: '#FFF',
-          },
-        }}
-      >
-        <StatusBar style="light" backgroundColor="#4D55F5" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(drawer)" />
-          <Stack.Screen name="AuthContext" />
-          <Stack.Screen name="Setting" />
-        </Stack>
-      </ThemeProvider>
-    </AuthContextProvider>
+    <SafeAreaProvider>
+      <AuthContextProvider>
+        <ThemeProvider
+          value={{
+            ...DefaultTheme,
+            colors: {
+              ...DefaultTheme.colors,
+              background: '#FFF',
+            },
+          }}
+        >
+          <SafeAreaView style={{ flex: 1, backgroundColor: '#4D55F5' }}>
+            <StatusBar style="light" />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(drawer)" />
+              <Stack.Screen name="AuthContext" />
+              <Stack.Screen name="Setting" />
+            </Stack>
+          </SafeAreaView>
+        </ThemeProvider>
+      </AuthContextProvider>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',

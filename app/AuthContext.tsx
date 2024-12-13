@@ -1,14 +1,22 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { Appearance } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut as firebaseSignOut, // import signOut from firebase
+} from "firebase/auth";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
 const authContext = createContext(null);
 
 export const useAuthContext = () => useContext(authContext);
 
-const authContextProvider = ({ children }) => {
-  const [themeMode, setThemeMode] = useState("light"); 
-  // const [backgroundColor, setBackgroundColor] = useState("#fff");
+const AuthContextProvider = ({ children }) => {
+  const [themeMode, setThemeMode] = useState("light");
+  const [user, setUser] = useState(null);
+  const auth = FIREBASE_AUTH;
 
   useEffect(() => {
     (async () => {
@@ -20,16 +28,14 @@ const authContextProvider = ({ children }) => {
         if (systemTheme) {
           setThemeMode(systemTheme);
         } else {
-          setThemeMode("light"); // Default to "light" if unable to determine system theme
+          setThemeMode("light");
         }
       }
     })();
   }, []);
 
   useEffect(() => {
-    // Save the current theme mode to AsyncStorage whenever it changes
     AsyncStorage.setItem("themeMode", themeMode);
-    // setBackgroundColor(themeMode === "dark" ? "#1C1C22" : "#fff");
   }, [themeMode]);
 
   const toggleThemeMode = () => {
@@ -37,13 +43,49 @@ const authContextProvider = ({ children }) => {
     setThemeMode(newThemeMode);
   };
 
+  // Firebase Authentication Methods
+  const signUp = async (email, password) => {
+    if (!email || !password) throw new Error("Please fill in all fields.");
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    setUser(userCredential.user);
+    return userCredential.user;
+  };
+
+  const signIn = async (email, password) => {
+    if (!email || !password) throw new Error("Please fill in all fields.");
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    setUser(userCredential.user);
+    
+    return userCredential.user;
+  };
+
+  const resetPassword = async (email) => {
+    if (!email) throw new Error("Please enter your email to reset the password.");
+    await sendPasswordResetEmail(auth, email);
+    return true;
+  };
+
+  // Sign out method
+  const signOut = async () => {
+    try {
+      await firebaseSignOut(auth); // Firebase signOut method
+      setUser(null); // Set user state to null after successful sign out
+    } catch (error) {
+      throw new Error("Sign out failed: " + error.message);
+    }
+  };
+
   const value = {
     themeMode,
     toggleThemeMode,
-    // backgroundColor,
+    user,
+    signUp,
+    signIn,
+    resetPassword,
+    signOut, // Add signOut to context
   };
 
   return <authContext.Provider value={value}>{children}</authContext.Provider>;
 };
 
-export default authContextProvider;
+export default AuthContextProvider;

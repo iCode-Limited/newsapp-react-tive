@@ -96,9 +96,9 @@ const MyFavorites = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 30,
-    backgroundColor: '#fff',
+    // paddingHorizontal: 10,
+    // paddingVertical: 30,
+    // backgroundColor: '#fff',
 
 
   },
@@ -119,10 +119,10 @@ const styles = StyleSheet.create({
     // marginBottom: 15,
     alignItems: 'center',
     justifyContent:'center',
-    borderTopWidth: 1,
+    borderBottomWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderTopColor:'#ccc'
+    borderBottomColor:'#ccc'
   },
   itemImage: {
     width: 65,

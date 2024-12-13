@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useAuthContext } from "./AuthContext";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+import HeaderBack from "@/components/header/HeaderBack";
 
 const DetailScreen = () => {
   const { item } = useLocalSearchParams();
@@ -14,20 +15,15 @@ const DetailScreen = () => {
 
   return (
     <View style={[styles.container,themeMode === "dark" && { backgroundColor: "#333030" }]}>
-        <Pressable
-      hitSlop={30}
-        style={styles.goBackIcon}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Icon name="arrow-back" size={28} color="#333" style={[themeMode === "dark" && { color: "#fff" }]} />
-      </Pressable>
+      <HeaderBack title={'News'} navigation={navigation}/>
+      <View style={styles.contentContainer}>
       {parsedItem.image && (
         <Image source={{ uri: parsedItem.image }} style={styles.image} />
       )}
       <Text style={[styles.title,themeMode === "dark" && { color: "#fff" }]}>{parsedItem.title}</Text>
       <Text style={[styles.content,themeMode === "dark" && { color: "#ccc" }]}>{parsedItem.content}</Text>
+
+      </View>
     </View>
   );
 };
@@ -38,9 +34,9 @@ export default DetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: "#fff",
-    top:30
+  },
+  contentContainer:{
+    padding:10,
   },
   image: {
     width: "100%",

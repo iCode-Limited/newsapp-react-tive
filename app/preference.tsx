@@ -98,8 +98,8 @@ export default Preference;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 30,
+    // paddingHorizontal: 10,
+    // paddingVertical: 30,
   },
   headerText: {
     fontSize: 30,
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderTopWidth: 1,
+    borderBottomWidth: 1,
     paddingHorizontal: 20,
     paddingVertical: 15,
-    borderTopColor:'#ddd'
+    borderBottomColor:'#ddd'
   },
   settingItemText: {
     fontSize: 18,

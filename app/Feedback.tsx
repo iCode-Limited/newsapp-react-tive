@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import React, { useState } from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import { useNavigation } from '@react-navigation/native';
 import { useAuthContext } from './AuthContext';
+import HeaderBack from '@/components/header/HeaderBack';
 const Feedback = ( ) => {
   const [feedback, setFeedback] = useState('');
   const navigation = useNavigation();
@@ -19,16 +19,8 @@ const Feedback = ( ) => {
 
   return (
     <View style={[styles.container,themeMode === "dark" && { backgroundColor: "#1C1C22" }]}>
-      <Pressable
-      hitSlop={30}
-        style={styles.goBackIcon}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Icon name="arrow-back" size={28} color="#333" style={[themeMode === "dark" && { color: "#fff" }]} />
-      </Pressable>
-
+      <HeaderBack title={'FeedBack'} navigation={navigation}/>
+      <View style={styles.contentContainer}>
       <Text style={[styles.header,themeMode === "dark" && { color: "#fff" }]}>We value your feedback!</Text>
       <TextInput
   style={[
@@ -45,6 +37,7 @@ const Feedback = ( ) => {
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -54,15 +47,19 @@ export default Feedback;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f9f9f9',
-    justifyContent: 'center',
+  //   padding: 20,
+  //   backgroundColor: '#f9f9f9',
+  //   justifyContent: 'center',
+  // },
+  // goBackIcon: {
+  //   position: 'absolute',
+  //   top: 50,
+  //   left: 20,
+  //   zIndex: 10,
   },
-  goBackIcon: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
+  contentContainer:{
+    padding: 20,
+    justifyContent: 'center',
   },
   header: {
     fontSize: 22,
