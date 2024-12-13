@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useNavigation } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,7 +15,7 @@ export default function Header({ title }) {
         hitSlop={30}
         onPress={() => navigation.toggleDrawer()}>
         <Image
-          style={{ width: 22, height: 25,bottom:8 }}
+          style={styles.drawerImg}
           source={require("../../assets/images/drawerIc.png")}
         />
       </Pressable>
@@ -38,7 +38,7 @@ export default function Header({ title }) {
         }
       >
         <Image
-          style={{ width: 22, height: 22, tintColor: "#fff",bottom:8 }}
+          style={styles.settingImg}
           source={require("../../src/assets/images/setting.png")}
         />
       </Pressable>
@@ -56,32 +56,44 @@ const Styles = () => {
       alignItems: "center",
       backgroundColor: "#4D55F5",
       paddingHorizontal: 15,
-      paddingTop: inset.top,
-      height: 70,
+      // paddingTop: inset.top,
+      height: 70, 
       borderBottomStartRadius: 15,
       borderBottomEndRadius: 15,
     },
     titleContainer: {
       flexDirection: "row",
-      alignItems: "flex-start",
-      justifyContent: "center", 
+      alignItems: "center",  
+      justifyContent: "center",
       gap: 10,
-      paddingBottom: 13,
     },
     titleText: {
       fontSize: 18,
       fontWeight: "bold",
       color: "#fff",
+      textAlign: "center", 
     },
     subtitleText: {
       fontSize: 18,
       fontWeight: "bold",
       color: "#fff",
+      textAlign: "center",
     },
     logo: {
       width: 30,
       height: 30,
       borderRadius: 15,
     },
+    settingImg: { 
+      width: 22, 
+      height: 22, 
+      tintColor: "#fff",
+    },
+    drawerImg: {
+      width: 22, 
+      height: 22, 
+      tintColor: "#fff",
+    },
   });
 };
+
