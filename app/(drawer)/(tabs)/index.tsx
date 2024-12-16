@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   smallicon: {
     flexDirection: "row",
     justifyContent: "space-around",
-    bottom: Platform.OS === "ios" ? 90 : 60,
+    bottom: Platform.OS === "ios" ? 80 : 70,
     height: '15%',
   },
   smallTitle:{
