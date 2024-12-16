@@ -27,7 +27,7 @@ const MainScreen = ({ navigation }) => {
   const [carouselData, setCarouselData] = useState([]);
   const [favoritedItems, setFavoritedItems] = useState({});
   const router = useRouter();
-  const { themeMode ,user} = useAuthContext();
+  const { themeMode, user } = useAuthContext();
 
   useEffect(() => {
     setCarouselData(data.news_posts || []);
@@ -78,7 +78,7 @@ const MainScreen = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => {
     const shouldShowAd = (index + 1) % 3 === 0;
-
+  
     return (
       <View
         style={[
@@ -99,18 +99,20 @@ const MainScreen = ({ navigation }) => {
             style={[styles.itemImage, shouldShowAd && styles.smallItemImage]}
           />
           <Text
-            numberOfLines={3}
+            numberOfLines={2}
             style={[
               styles.itemTitle,
+              shouldShowAd && styles.smallTitle,
               themeMode === "dark" && { color: "#fff" },
             ]}
           >
             {item.title}
           </Text>
           <Text
-            numberOfLines={15}
+            numberOfLines={8}
             style={[
               styles.itemDescription,
+              shouldShowAd && styles.smallDescription,
               themeMode === "dark" && { color: "#fff" },
             ]}
           >
@@ -118,16 +120,29 @@ const MainScreen = ({ navigation }) => {
           </Text>
         </Pressable>
         <View style={[styles.iconContainer, shouldShowAd && styles.smallicon]}>
-          <TouchableOpacity
-            style={[styles.iconButton]}
-            onPress={() => toggleFavorite(item)}
-          >
-            <Fav
-              name={favoritedItems[item.id] ? "bookmark" : "bookmark-o"}
-              size={24}
-              color={favoritedItems[item.id] ? "#4D55F5" : "#ccc"}
-            />
-          </TouchableOpacity>
+          {user ? (
+            <TouchableOpacity
+              style={[styles.iconButton]}
+              onPress={() => toggleFavorite(item)}
+            >
+              <Fav
+                name={favoritedItems[item.id] ? "bookmark" : "bookmark-o"}
+                size={24}
+                color={favoritedItems[item.id] ? "#4D55F5" : "#ccc"}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={[styles.iconButton]}
+              onPress={() =>
+                router.push({
+                  pathname: "/Signup",
+                })
+              }
+            >
+              <Fav name="bookmark-o" size={24} color="#ccc" />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => handleShare(item)}
@@ -143,6 +158,7 @@ const MainScreen = ({ navigation }) => {
       </View>
     );
   };
+  
 
   return (
     <View
@@ -153,26 +169,26 @@ const MainScreen = ({ navigation }) => {
     >
       <Header title="Top News" navigation={navigation} />
       <FlatList
-  data={carouselData}
-  keyExtractor={(item, index) => index.toString()}
-  renderItem={renderItem}
-  pagingEnabled={true}
-  
-  showsVerticalScrollIndicator={false}
-  contentContainerStyle={[
-    styles.flatListContainer,
-    // {
-    //   paddingBottom:
-    //     Platform.OS === "ios"
-    //       ? height * 0
-    //       : height * 0,
-    // },
-  ]}
-  snapToAlignment="start"
-  decelerationRate={Platform.OS === "ios" ? "fast" : "normal"}
-  snapToInterval={height * 0.8 + 20} 
-  
-/>
+        data={carouselData}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        pagingEnabled={true}
+
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          styles.flatListContainer,
+          // {
+          //   paddingBottom:
+          //     Platform.OS === "ios"
+          //       ? height * 0
+          //       : height * 0,
+          // },
+        ]}
+        snapToAlignment="start"
+        decelerationRate={Platform.OS === "ios" ? "fast" : "normal"}
+        snapToInterval={height * 0.8 + 20}
+
+      />
 
 
     </View>
@@ -189,47 +205,56 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flexGrow: 1,
     alignItems: "center",
-    paddingVertical: 15,
-    paddingBottom: Platform.OS === "ios"? 0 : 0,
-  
+    paddingVertical: 14,
+    paddingBottom: Platform.OS === "ios" ? 0 : 50,
+    paddingHorizontal:10,
+
   },
-  
+
   itemContainer: {
-    width: width * 0.9, 
+    // width: width * 0.9,
     height: Platform.OS === "ios" ? height * 0.8 : height * 0.8,
     backgroundColor: "#fff",
     marginBottom: 20,
-    // padding: 10,
     borderRadius: 10,
     flexDirection: "column",
     justifyContent: "space-between",
-   },
+  },
   itemImage: {
     width: "100%",
-    height: Platform.OS === "ios" ? "40%" : "40%", 
+    height: Platform.OS === "ios" ? "60%" : "60%",
     resizeMode: "cover",
     borderRadius: 10,
   },
   smallItemImage: {
-    height: Platform.OS === "ios" ? "40%" : "40%",
+    height: Platform.OS === "ios" ? "50%" : "50%",
   },
   itemTitle: {
+    height: '10%',
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
   },
   itemDescription: {
-    fontSize: 14,
+    // fontSize: width * 0.04,
     color: "#333",
+    height: Platform.OS === "ios" ? "20%" : "23.5%",
+    flexWrap: "wrap",
+    textAlign: "justify",
   },
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     paddingVertical: 10,
-    bottom:Platform.OS === "ios" ? 80 : 40,
+    bottom: Platform.OS === "ios" ? 40 : 20,
+    height: '15%',
   },
   iconButton: {
-    // paddingHorizontal: 20,
+    // flexDirection: "row",
+    // justifyContent: "space-around",
+    // paddingVertical: 10,
+    // bottom: Platform.OS === "ios" ? 60 : 0,
+    // backgroundColor:'red'
   },
   adContainer: {
     height: Platform.OS === "ios" ? 100 : 100,
@@ -237,17 +262,30 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    bottom: Platform.OS === "ios" ? 40 : 0, 
+    bottom: Platform.OS === "ios" ? 130 : 110,
   },
   adText: {
-    fontSize: Platform.OS === "ios" ? 20 : 18, 
+    fontSize: Platform.OS === "ios" ? 20 : 18,
     fontWeight: "bold",
     color: "#fff",
   },
-  smallicon:{
+  smallicon: {
     flexDirection: "row",
     justifyContent: "space-around",
-    // paddingVertical: 10,
-    bottom:Platform.OS === "ios" ? 50 : 0,
+    bottom: Platform.OS === "ios" ? 90 : 60,
+    height: '15%',
+  },
+  smallTitle:{
+    height: '10%',
+    fontSize: 20,
+    fontWeight: "bold",
+    marginVertical: 10,
+  },
+  smallDescription:{
+    fontSize: width * 0.04,
+    color: "#333",
+    height: Platform.OS === "ios" ? "19%" : "23.5%",
+    flexWrap: "wrap",
+    textAlign: "justify",
   }
 });

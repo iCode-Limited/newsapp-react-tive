@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  signOut as firebaseSignOut, // import signOut from firebase
+  signOut as firebaseSignOut, 
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
@@ -20,6 +20,11 @@ const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
+      const storedUser = await AsyncStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser)); 
+      }
+
       const storedTheme = await AsyncStorage.getItem("themeMode");
       if (storedTheme) {
         setThemeMode(storedTheme);
@@ -38,12 +43,19 @@ const AuthContextProvider = ({ children }) => {
     AsyncStorage.setItem("themeMode", themeMode);
   }, [themeMode]);
 
+  useEffect(() => {
+    if (user) {
+      AsyncStorage.setItem("user", JSON.stringify(user)); 
+    } else {
+      AsyncStorage.removeItem("user"); 
+    }
+  }, [user]);
+
   const toggleThemeMode = () => {
     const newThemeMode = themeMode === "dark" ? "light" : "dark";
     setThemeMode(newThemeMode);
   };
 
-  // Firebase Authentication Methods
   const signUp = async (email, password) => {
     if (!email || !password) throw new Error("Please fill in all fields.");
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -55,7 +67,6 @@ const AuthContextProvider = ({ children }) => {
     if (!email || !password) throw new Error("Please fill in all fields.");
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     setUser(userCredential.user);
-    
     return userCredential.user;
   };
 
@@ -65,11 +76,10 @@ const AuthContextProvider = ({ children }) => {
     return true;
   };
 
-  // Sign out method
   const signOut = async () => {
     try {
-      await firebaseSignOut(auth); // Firebase signOut method
-      setUser(null); // Set user state to null after successful sign out
+      await firebaseSignOut(auth); 
+      setUser(null); 
     } catch (error) {
       throw new Error("Sign out failed: " + error.message);
     }
@@ -82,7 +92,7 @@ const AuthContextProvider = ({ children }) => {
     signUp,
     signIn,
     resetPassword,
-    signOut, // Add signOut to context
+    signOut, 
   };
 
   return <authContext.Provider value={value}>{children}</authContext.Provider>;

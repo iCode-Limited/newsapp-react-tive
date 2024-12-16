@@ -13,7 +13,10 @@ export default function App() {
                 tabBarActiveBackgroundColor: "#4D55F5",
                 tabBarStyle: {
                     backgroundColor: "#4D55F5",
-                    padding: 15,
+                    paddingVertical: 10, 
+                    height: 60,      
+                    position: 'absolute',
+                    bottom: 0,          
                 },
                 tabBarLabelStyle: {
                     fontSize: 12,
@@ -22,7 +25,6 @@ export default function App() {
                 },
             }}
         >
-            {/* Home Tab */}
             <Tabs.Screen
                 name="index"
                 options={{

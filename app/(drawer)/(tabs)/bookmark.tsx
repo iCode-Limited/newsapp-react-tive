@@ -9,31 +9,39 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useAuthContext } from "@/app/AuthContext";
 import HeaderBack from "@/components/header/HeaderBack";
+
 const MyFavorites = () => {
   const navigation = useNavigation();
   const [favoritedItems, setFavoritedItems] = useState([]);
   const router = useRouter();
-  const { themeMode } = useAuthContext();
+  const { themeMode, user } = useAuthContext(); // Access user from context
 
   useEffect(() => {
     const loadFavorites = async () => {
       try {
         const savedFavorites = await AsyncStorage.getItem("favorites");
-        setFavoritedItems(savedFavorites ? Object.values(JSON.parse(savedFavorites)) : []);
+        setFavoritedItems(
+          savedFavorites ? Object.values(JSON.parse(savedFavorites)) : []
+        );
       } catch (error) {
         console.error("Error loading favorites", error);
       }
     };
 
-    loadFavorites();
+    if (user) {
+      // Only load favorites if the user is signed in
+      loadFavorites();
+    } else {
+      setFavoritedItems([]); // Clear favorites when the user signs out
+    }
 
     const unsubscribe = navigation.addListener("focus", loadFavorites);
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, user]);
 
   const removeFavorite = async (id) => {
     try {
@@ -53,17 +61,36 @@ const MyFavorites = () => {
   const handleToDetailScreen = (item) => {
     router.push({
       pathname: "/DetailScreen",
-      params: { item: JSON.stringify(item) }, 
+      params: { item: JSON.stringify(item) },
     });
   };
 
   const renderFavItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleToDetailScreen(item)}>
-      <View style={[styles.itemContainer,themeMode === "dark" && { backgroundColor: "#333030" }]}>
+      <View
+        style={[
+          styles.itemContainer,
+          themeMode === "dark" && { backgroundColor: "#333030" },
+        ]}
+      >
         <Image source={{ uri: item.image }} style={styles.itemImage} />
         <View style={styles.itemText}>
-          <Text numberOfLines={2} style={[styles.itemTitle,themeMode === "dark" && { color: "#fff" }]}>{item.title}</Text>
-          <Text  numberOfLines={3} style={[styles.itemDescription,themeMode === "dark" && { color: "#ccc" }]}>
+          <Text
+            numberOfLines={2}
+            style={[
+              styles.itemTitle,
+              themeMode === "dark" && { color: "#fff" },
+            ]}
+          >
+            {item.title}
+          </Text>
+          <Text
+            numberOfLines={3}
+            style={[
+              styles.itemDescription,
+              themeMode === "dark" && { color: "#ccc" },
+            ]}
+          >
             {item.content}
           </Text>
         </View>
@@ -71,15 +98,50 @@ const MyFavorites = () => {
     </TouchableOpacity>
   );
 
+  if (!user) {
+    // Render message if the user is not signed in
+    return (
+      <View
+        style={[
+          styles.container,
+          themeMode === "dark" && { backgroundColor: "#1C1C22" },
+        ]}
+      >
+        <HeaderBack title={"Bookmark"} navigation={navigation} />
+        <View style={styles.noFavoritesContainer}>
+          <Icon name="person-outline" size={50} color="#FF6347" />
+          <Text
+            style={[
+              styles.noFavoritesText,
+              themeMode === "dark" && { color: "#fff" },
+            ]}
+          >
+            Please sign in to view your bookmarks.
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
-    <View style={[styles.container,themeMode === "dark" && { backgroundColor: "#1C1C22" }]}>
-       {/* <Text style={[styles.headerText,themeMode === "dark" && { color: "#fff" }]}>My Bookmarks</Text> */}
-       <HeaderBack title={'Bookmark'} navigation={navigation}/>
+    <View
+      style={[
+        styles.container,
+        themeMode === "dark" && { backgroundColor: "#1C1C22" },
+      ]}
+    >
+      <HeaderBack title={"Bookmark"} navigation={navigation} />
       {favoritedItems.length === 0 ? (
         <View style={styles.noFavoritesContainer}>
           <Icon name="bookmark-border" size={50} color="#FF6347" />
-          <Text style={[styles.noFavoritesText,themeMode === "dark" && { color: "#fff" }]}>
-            You haven’t marked any articles to read them later. To do so, you can tap the bookmark.
+          <Text
+            style={[
+              styles.noFavoritesText,
+              themeMode === "dark" && { color: "#fff" },
+            ]}
+          >
+            You haven’t marked any articles to read them later. To do so, you
+            can tap the bookmark.
           </Text>
         </View>
       ) : (
@@ -96,33 +158,27 @@ const MyFavorites = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingHorizontal: 10,
-    // paddingVertical: 30,
-    // backgroundColor: '#fff',
-
-
   },
   noFavoritesContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   noFavoritesText: {
     marginTop: 10,
     fontSize: 16,
-    textAlign: 'center',
-    color: '#555',
+    textAlign: "center",
+    color: "#555",
   },
   itemContainer: {
-    flexDirection: 'row',
-    // marginBottom: 15,
-    alignItems: 'center',
-    justifyContent:'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     borderBottomWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderBottomColor:'#ccc'
+    borderBottomColor: "#ccc",
   },
   itemImage: {
     width: 65,
@@ -134,18 +190,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemTitle: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   itemDescription: {
     fontSize: 14,
-    color: '#555',
-  },
-  headerText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    // marginBottom: 20,
-    marginHorizontal:10,
-    marginVertical:10
+    color: "#555",
   },
 });
 
