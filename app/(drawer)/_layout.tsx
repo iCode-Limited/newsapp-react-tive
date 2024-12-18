@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, Pressable,Share } from 'react-native';
-import React,{useState} from 'react';
+import { StyleSheet, Text, View, Image, Pressable, Share } from 'react-native';
+import React, { useState } from 'react';
 import { Drawer } from 'expo-router/drawer';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Searchbar } from 'react-native-paper';
@@ -13,29 +13,29 @@ const CustomDrawer = (props) => {
     const [searchQuery, setSearchQuery] = useState('');
     const { themeMode } = useAuthContext();
 
-   
+
 
     return (
         <DrawerContentScrollView {...props} style={[themeMode === "dark" && { backgroundColor: "#1C1C22" }]}>
-         <Searchbar
-  placeholder="Search"
-  onChangeText={setSearchQuery}
-  value={searchQuery}
-  style={[styles.searchbar, themeMode === "dark" && { backgroundColor: "#333030" }]}
-  inputStyle={[{ color: themeMode === "dark" ? "#FFF" : "#000" }]}  
-  placeholderTextColor={themeMode === "dark" ? "#fff" : "#000"} 
-/>
+            <Searchbar
+                placeholder="Search"
+                onChangeText={setSearchQuery}
+                value={searchQuery}
+                style={[styles.searchbar, themeMode === "dark" && { backgroundColor: "#333030" }]}
+                inputStyle={[{ color: themeMode === "dark" ? "#FFF" : "#000" }]}
+                placeholderTextColor={themeMode === "dark" ? "#fff" : "#000"}
+            />
 
             <DrawerItem
                 icon={({ color, size, focused }) => (
                     <Icon name="bookmark" size={24} color="#4D55F5" />
                 )}
                 label={"My Bookmark"}
-                labelStyle={[styles.navItemLabel,themeMode === "dark" && { color: "#fff" }]}
+                labelStyle={[styles.navItemLabel, themeMode === "dark" && { color: "#fff" }]}
                 style={[{
                     marginVertical: 8,
                     backgroundColor: pathname == "index" ? "rgba(78, 223, 255,0.4)" : "rgba(78, 223, 255,0.4)",
-                },themeMode === "dark" && { backgroundColor: "#333030" }]}
+                }, themeMode === "dark" && { backgroundColor: "#333030" }]}
                 contentContainerStyle={styles.drawerItemContainer}
                 onPress={() => router.push('/bookmark')}
             />
@@ -44,11 +44,11 @@ const CustomDrawer = (props) => {
                     <Icon name="assignment" size={24} color="#4D55F5" />
                 )}
                 label={"My Preferences"}
-                labelStyle={[styles.navItemLabel,themeMode === "dark" && { color: "#fff" }]}
+                labelStyle={[styles.navItemLabel, themeMode === "dark" && { color: "#fff" }]}
                 style={[{
-                marginVertical: 8,
-                backgroundColor: pathname == "index" ? "rgba(78, 223, 255,0.4)" : "rgba(78, 223, 255,0.4)",
-                },themeMode === "dark" && { backgroundColor: "#333030" }]}
+                    marginVertical: 8,
+                    backgroundColor: pathname == "index" ? "rgba(78, 223, 255,0.4)" : "rgba(78, 223, 255,0.4)",
+                }, themeMode === "dark" && { backgroundColor: "#333030" }]}
                 contentContainerStyle={styles.drawerItemContainer}
                 onPress={() => router.push('../../../preference')}
             />
@@ -57,11 +57,11 @@ const CustomDrawer = (props) => {
                     <Icon name="article" size={24} color="#4D55F5" />
                 )}
                 label={"All News"}
-                labelStyle={[styles.navItemLabel,themeMode === "dark" && { color: "#fff" }]}
+                labelStyle={[styles.navItemLabel, themeMode === "dark" && { color: "#fff" }]}
                 style={[{
-                marginVertical: 8,
-                backgroundColor: pathname == "index" ? "rgba(78, 223, 255,0.4)" : "rgba(78, 223, 255,0.4)",
-                },themeMode === "dark" && { backgroundColor: "#333030" }]}
+                    marginVertical: 8,
+                    backgroundColor: pathname == "index" ? "rgba(78, 223, 255,0.4)" : "rgba(78, 223, 255,0.4)",
+                }, themeMode === "dark" && { backgroundColor: "#333030" }]}
                 contentContainerStyle={styles.drawerItemContainer}
                 onPress={() => router.push('/')}
             />
@@ -88,17 +88,17 @@ export default function Layout() {
 
 const styles = StyleSheet.create({
     navItemLabel: {
-        marginLeft: 16, 
+        marginLeft: 16,
         fontSize: 18,
         fontWeight: 'bold',
         fontFamily: "helvetica",
         color: "#000",
-       
+
     },
     drawerItemContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        
+
     },
     drawerIc: {
         width: 20,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     searchbar: {
         // marginHorizontal: 5,
         marginVertical: 8,
-        backgroundColor:'rgba(78, 223, 255,0.4)'
-        
+        backgroundColor: 'rgba(78, 223, 255,0.4)'
+
     },
 });

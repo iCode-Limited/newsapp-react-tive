@@ -58,8 +58,8 @@ const Styles = () => {
       paddingHorizontal: 15,
       // paddingTop: inset.top,
       height: 70, 
-      borderBottomStartRadius: 15,
-      borderBottomEndRadius: 15,
+      // borderBottomStartRadius: 15,
+      // borderBottomEndRadius: 15,
     },
     titleContainer: {
       flexDirection: "row",

@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#4D55F5',
     paddingHorizontal: 15,
     height: 70,
-    borderBottomStartRadius: 15,
-    borderBottomEndRadius: 15,
+    // borderBottomStartRadius: 15,
+    // borderBottomEndRadius: 15,
     width:'100%'
   },
   backButton: {

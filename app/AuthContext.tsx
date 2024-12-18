@@ -14,7 +14,7 @@ const authContext = createContext(null);
 export const useAuthContext = () => useContext(authContext);
 
 const AuthContextProvider = ({ children }) => {
-  const [themeMode, setThemeMode] = useState("light");
+  const [themeMode, setThemeMode] = useState(null);
   const [user, setUser] = useState(null);
   const auth = FIREBASE_AUTH;
 

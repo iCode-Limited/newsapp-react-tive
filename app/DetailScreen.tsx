@@ -5,6 +5,7 @@ import { useAuthContext } from "./AuthContext";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import HeaderBack from "@/components/header/HeaderBack";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 const DetailScreen = () => {
   const { item } = useLocalSearchParams();
@@ -36,22 +37,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer:{
-    padding:10,
+    // padding:10,
   },
   image: {
     width: "100%",
-    height: 200,
+    height: verticalScale(280),
     resizeMode: "cover",
-    // marginBottom: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+    paddingHorizontal: moderateScale(10),
   },
   content: {
     fontSize: 16,
     lineHeight: 24,
+    paddingHorizontal: moderateScale(10),
   },
   goBackIcon: {
     position: 'absolute',

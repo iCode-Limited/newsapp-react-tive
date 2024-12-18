@@ -10,8 +10,6 @@ import {
   Pressable,
   Share,
   Platform,
-  SafeAreaView,
-  Alert
 } from "react-native";
 import Header from "../../../components/header/Header";
 import data from "../../../constants/data/data.json";
@@ -20,8 +18,16 @@ import Fav from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useAuthContext } from "../../AuthContext";
-
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get("window");
+
+const snapToIntervalValue = Platform.OS === 'ios' 
+  ? verticalScale(560) + moderateScale(22) 
+  : verticalScale(565) + moderateScale(22);  
+
+const itemHeight = Platform.OS === 'ios' 
+  ? verticalScale(560) 
+  : verticalScale(565); 
 
 const MainScreen = ({ navigation }) => {
   const [carouselData, setCarouselData] = useState([]);
@@ -78,7 +84,7 @@ const MainScreen = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => {
     const shouldShowAd = (index + 1) % 3 === 0;
-  
+
     return (
       <View
         style={[
@@ -158,7 +164,7 @@ const MainScreen = ({ navigation }) => {
       </View>
     );
   };
-  
+
 
   return (
     <View
@@ -169,26 +175,19 @@ const MainScreen = ({ navigation }) => {
     >
       <Header title="Top News" navigation={navigation} />
       <FlatList
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          paddingBottom: Platform.OS === "ios" ? moderateScale(9) : moderateScale(43),
+        }}
         data={carouselData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
-        pagingEnabled={true}
-
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          styles.flatListContainer,
-          // {
-          //   paddingBottom:
-          //     Platform.OS === "ios"
-          //       ? height * 0
-          //       : height * 0,
-          // },
-        ]}
         snapToAlignment="start"
-        decelerationRate={Platform.OS === "ios" ? "fast" : "normal"}
-        snapToInterval={height * 0.8 + 20}
-
+        decelerationRate="fast"
+        snapToInterval={snapToIntervalValue}
       />
+
 
 
     </View>
@@ -202,90 +201,94 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
+
   flatListContainer: {
     flexGrow: 1,
     alignItems: "center",
-    paddingVertical: 14,
-    paddingBottom: Platform.OS === "ios" ? 0 : 50,
-    paddingHorizontal:10,
-
+    paddingVertical: moderateScale(14),
+    paddingBottom: Platform.OS === "ios" ? moderateScale(10) : moderateScale(10),
+    paddingHorizontal: moderateScale(10),
   },
 
   itemContainer: {
-    // width: width * 0.9,
-    height: Platform.OS === "ios" ? height * 0.8 : height * 0.8,
+    // width: "100%", 
+    height: itemHeight,
     backgroundColor: "#fff",
-    marginBottom: 20,
-    borderRadius: 10,
-    flexDirection: "column",
+    marginBottom: moderateScale(20),
     justifyContent: "space-between",
+    overflow: "hidden",
   },
+
   itemImage: {
     width: "100%",
-    height: Platform.OS === "ios" ? "60%" : "60%",
+    height: verticalScale(280),
     resizeMode: "cover",
-    borderRadius: 10,
   },
+
   smallItemImage: {
-    height: Platform.OS === "ios" ? "50%" : "50%",
+    width: "100%",
+    height: verticalScale(240),
+    resizeMode: "cover",
   },
+
   itemTitle: {
-    height: '10%',
-    fontSize: 20,
+    fontSize: moderateScale(18),
     fontWeight: "bold",
-    marginVertical: 10,
+    marginVertical: moderateScale(5),
+    paddingHorizontal: moderateScale(10),
   },
+
   itemDescription: {
-    // fontSize: width * 0.04,
+    fontSize: moderateScale(14),
     color: "#333",
-    height: Platform.OS === "ios" ? "20%" : "23.5%",
+    height: verticalScale(120),
     flexWrap: "wrap",
     textAlign: "justify",
+    paddingHorizontal: moderateScale(10),
   },
+
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingVertical: 10,
-    bottom: Platform.OS === "ios" ? 40 : 20,
-    height: '15%',
+    paddingVertical: moderateScale(10),
+    height: verticalScale(50),
+    bottom: Platform.OS === "ios" ? moderateScale(40) : moderateScale(10)
   },
-  iconButton: {
-    // flexDirection: "row",
-    // justifyContent: "space-around",
-    // paddingVertical: 10,
-    // bottom: Platform.OS === "ios" ? 60 : 0,
-    // backgroundColor:'red'
-  },
+
   adContainer: {
-    height: Platform.OS === "ios" ? 100 : 100,
-    backgroundColor: "red",
-    borderRadius: 10,
+    height:100,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    borderRadius: moderateScale(10),
     alignItems: "center",
     justifyContent: "center",
-    bottom: Platform.OS === "ios" ? 130 : 110,
+    marginBottom:Platform.OS === "ios" ? moderateScale(42) : moderateScale(0),
+    marginHorizontal: moderateScale(10),
   },
+
   adText: {
-    fontSize: Platform.OS === "ios" ? 20 : 18,
+    fontSize: moderateScale(18),
     fontWeight: "bold",
     color: "#fff",
   },
+
   smallicon: {
     flexDirection: "row",
     justifyContent: "space-around",
-    bottom: Platform.OS === "ios" ? 80 : 70,
-    height: '15%',
+    top: Platform.OS === "ios" ? moderateScale(-10) : moderateScale(20)
   },
-  smallTitle:{
-    height: '10%',
-    fontSize: 20,
+
+  smallTitle: {
+    fontSize: moderateScale(16),
     fontWeight: "bold",
-    marginVertical: 10,
+    marginVertical: moderateScale(5),
   },
-  smallDescription:{
-    fontSize: width * 0.04,
+
+  smallDescription: {
+    fontSize: moderateScale(13),
     color: "#333",
-    height: Platform.OS === "ios" ? "19%" : "23.5%",
+    height: verticalScale(85),
     flexWrap: "wrap",
     textAlign: "justify",
-  }
+    paddingHorizontal: moderateScale(10),
+  },
 });
