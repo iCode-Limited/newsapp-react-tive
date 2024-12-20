@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Pressable,
   Share,
-  Platform,
+  SafeAreaView,
+  Platform
 } from "react-native";
 import Header from "../../../components/header/Header";
 import data from "../../../constants/data/data.json";
@@ -19,21 +20,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useAuthContext } from "../../AuthContext";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 const { width, height } = Dimensions.get("window");
+const snapToIntervalValue = Platform.OS === 'ios'
+  ? height * 0.8 + moderateScale(20)
+  : height * 0.8 + moderateScale(20);
 
-const snapToIntervalValue = Platform.OS === 'ios' 
-  ? verticalScale(560) + moderateScale(22) 
-  : verticalScale(565) + moderateScale(22);  
-
-const itemHeight = Platform.OS === 'ios' 
-  ? verticalScale(560) 
-  : verticalScale(565); 
+// const itemHeight = Platform.OS === 'ios' 
+//   ? height * 0.8
+//   : height * 0.8; 
 
 const MainScreen = ({ navigation }) => {
   const [carouselData, setCarouselData] = useState([]);
   const [favoritedItems, setFavoritedItems] = useState({});
   const router = useRouter();
   const { themeMode, user } = useAuthContext();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     setCarouselData(data.news_posts || []);
@@ -61,10 +64,7 @@ const MainScreen = ({ navigation }) => {
 
   const toggleFavorite = async (item) => {
     if (!user) {
-      router.push({
-        pathname: "/Signup",
-        // params: { redirectTo: JSON.stringify({ screen: "favorite", item }) },
-      });
+      router.push({ pathname: "/Signup" });
       return;
     }
     try {
@@ -74,7 +74,6 @@ const MainScreen = ({ navigation }) => {
       } else {
         updatedFavorites[item.id] = item;
       }
-
       await AsyncStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       setFavoritedItems(updatedFavorites);
     } catch (error) {
@@ -84,7 +83,6 @@ const MainScreen = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => {
     const shouldShowAd = (index + 1) % 3 === 0;
-
     return (
       <View
         style={[
@@ -126,29 +124,16 @@ const MainScreen = ({ navigation }) => {
           </Text>
         </Pressable>
         <View style={[styles.iconContainer, shouldShowAd && styles.smallicon]}>
-          {user ? (
-            <TouchableOpacity
-              style={[styles.iconButton]}
-              onPress={() => toggleFavorite(item)}
-            >
-              <Fav
-                name={favoritedItems[item.id] ? "bookmark" : "bookmark-o"}
-                size={24}
-                color={favoritedItems[item.id] ? "#4D55F5" : "#ccc"}
-              />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[styles.iconButton]}
-              onPress={() =>
-                router.push({
-                  pathname: "/Signup",
-                })
-              }
-            >
-              <Fav name="bookmark-o" size={24} color="#ccc" />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={[styles.iconButton]}
+            onPress={() => toggleFavorite(item)}
+          >
+            <Fav
+              name={favoritedItems[item.id] ? "bookmark" : "bookmark-o"}
+              size={24}
+              color={favoritedItems[item.id] ? "#4D55F5" : "#ccc"}
+            />
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => handleShare(item)}
@@ -165,19 +150,16 @@ const MainScreen = ({ navigation }) => {
     );
   };
 
-
   return (
     <View
-      style={[
-        styles.container,
-        themeMode === "dark" && { backgroundColor: "#1C1C22" },
-      ]}
+      style={[styles.container, themeMode === "dark" && { backgroundColor: "#1C1C22" }]}
     >
       <Header title="Top News" navigation={navigation} />
       <FlatList
         style={{ flex: 1 }}
         contentContainerStyle={{
-          paddingBottom: Platform.OS === "ios" ? moderateScale(9) : moderateScale(43),
+          paddingTop: moderateScale(0), 
+          paddingBottom: insets.bottom + moderateScale(30),
         }}
         data={carouselData}
         keyExtractor={(item, index) => index.toString()}
@@ -186,9 +168,10 @@ const MainScreen = ({ navigation }) => {
         snapToAlignment="start"
         decelerationRate="fast"
         snapToInterval={snapToIntervalValue}
+        getItemLayout={(data, index) => (
+          {length: height, offset: height * index, index}
+        )}
       />
-
-
 
     </View>
   );
@@ -205,15 +188,11 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flexGrow: 1,
     alignItems: "center",
-    paddingVertical: moderateScale(14),
-    paddingBottom: Platform.OS === "ios" ? moderateScale(10) : moderateScale(10),
-    paddingHorizontal: moderateScale(10),
   },
 
   itemContainer: {
-    // width: "100%", 
-    height: itemHeight,
-    backgroundColor: "#fff",
+    height: height * 0.8,
+    backgroundColor: "red",
     marginBottom: moderateScale(20),
     justifyContent: "space-between",
     overflow: "hidden",
@@ -221,13 +200,13 @@ const styles = StyleSheet.create({
 
   itemImage: {
     width: "100%",
-    height: verticalScale(280),
+    height: height * 0.4,
     resizeMode: "cover",
   },
 
   smallItemImage: {
     width: "100%",
-    height: verticalScale(240),
+    height: moderateScale(240),
     resizeMode: "cover",
   },
 
@@ -239,9 +218,9 @@ const styles = StyleSheet.create({
   },
 
   itemDescription: {
-    fontSize: moderateScale(14),
+    fontSize: scale(14),
     color: "#333",
-    height: verticalScale(120),
+    // height: verticalScale(120),
     flexWrap: "wrap",
     textAlign: "justify",
     paddingHorizontal: moderateScale(10),
@@ -251,17 +230,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     paddingVertical: moderateScale(10),
-    height: verticalScale(50),
-    bottom: Platform.OS === "ios" ? moderateScale(40) : moderateScale(10)
+    height: moderateScale(50),
+    marginBottom: Platform.OS === "ios" ? moderateScale(20) : moderateScale(20)
   },
 
   adContainer: {
-    height:100,
+    height: moderateScale(100),
     backgroundColor: "rgba(0,0,0,0.3)",
     borderRadius: moderateScale(10),
     alignItems: "center",
     justifyContent: "center",
-    marginBottom:Platform.OS === "ios" ? moderateScale(42) : moderateScale(0),
+    // marginBottom:Platform.OS === "ios" ? moderateScale(42) : moderateScale(0),
     marginHorizontal: moderateScale(10),
   },
 
@@ -276,6 +255,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     top: Platform.OS === "ios" ? moderateScale(-10) : moderateScale(20)
   },
+  iconButton: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
 
   smallTitle: {
     fontSize: moderateScale(16),
@@ -284,9 +267,9 @@ const styles = StyleSheet.create({
   },
 
   smallDescription: {
-    fontSize: moderateScale(13),
+    fontSize: scale(13),
     color: "#333",
-    height: verticalScale(85),
+    // height: moderateScale(85),
     flexWrap: "wrap",
     textAlign: "justify",
     paddingHorizontal: moderateScale(10),

@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Dimensions,Platform } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '@/app/AuthContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { moderateScale } from 'react-native-size-matters';
 
 const { width } = Dimensions.get('window');
 
@@ -16,7 +17,7 @@ const HeaderBack = ({ title }) => {
     <View
       style={[
         styles.headerContainer,
-        // { paddingTop: inset.top }, // Adjust padding for safe area
+        { paddingTop: inset.top }, // Adjust padding for safe area
       ]}
     >
       <Pressable
@@ -50,12 +51,11 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: '#4D55F5',
-    paddingHorizontal: 15,
-    height: 70,
-    // borderBottomStartRadius: 15,
-    // borderBottomEndRadius: 15,
+    paddingHorizontal: moderateScale(15),
+    // height: Platform.OS === 'ios' ? 60  : 60, 
+    height:moderateScale(80),
     width:'100%'
   },
   backButton: {

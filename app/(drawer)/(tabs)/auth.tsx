@@ -73,7 +73,7 @@ const AuthScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <HeaderBack title={user ? 'Sign Out' : 'User'} />
       <ScrollView contentContainerStyle={[styles.scrollContainer]}>
         {user ? (
@@ -167,7 +167,7 @@ const AuthScreen = () => {
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

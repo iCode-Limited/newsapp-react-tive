@@ -75,7 +75,7 @@ const Signup = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <HeaderBack title={"User"} />
       <ScrollView contentContainerStyle={[styles.scrollContainer]}>
         <View style={styles.logoContainer}>
@@ -155,7 +155,7 @@ const Signup = () => {
           </TouchableOpacity>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

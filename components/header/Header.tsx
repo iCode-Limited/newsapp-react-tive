@@ -3,12 +3,13 @@ import React from "react";
 import { useNavigation } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { moderateScale } from "react-native-size-matters";
 
 export default function Header({ title }) {
   const navigation = useNavigation();
   const styles = Styles();
   const router = useRouter();
-
+  const insets = useSafeAreaInsets(); 
   return (
     <View style={styles.header}>
       <Pressable 
@@ -56,8 +57,9 @@ const Styles = () => {
       alignItems: "center",
       backgroundColor: "#4D55F5",
       paddingHorizontal: 15,
-      // paddingTop: inset.top,
-      height: 70, 
+      paddingTop: inset.top,
+      height: moderateScale(80), 
+      // height: Platform.OS === 'ios' ? 70 + inset.top : 70, 
       // borderBottomStartRadius: 15,
       // borderBottomEndRadius: 15,
     },
